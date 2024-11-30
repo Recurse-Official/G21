@@ -170,3 +170,38 @@ exports.getGroupVaultDetails = async (req, res) => {
     res.status(500).json({ success: false, error: error.message });
   }
 };
+
+exports.getUserVaults = async (req, res) => {
+  try {
+    const { userId } = req.params;
+
+    // Find all vaults where the userId exists in the contributions map
+    console.log(userId);
+    const groupVaults = await GroupVault.find({
+      [`contributions.${userId}`]: { $exists: true }, 
+    });
+    console.log(groupVaults);
+    if (!groupVaults || groupVaults.length === 0) {
+      return res.status(404).json({
+        success: false,
+        message: 'No vaults found for this user',
+      });
+    }
+    
+    // Format the response for better readability
+    const userVaults = groupVaults.map((vault) => ({
+      groupVaultId: vault.groupVaultId,
+      name: vault.name,
+      purpose: vault.purpose,
+      totalAmount: vault.totalAmount,
+      userContribution: vault.contributions.get(userId),
+    }));
+
+    res.status(200).json({
+      success: true,
+      userVaults,
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+};

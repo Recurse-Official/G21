@@ -16,7 +16,7 @@ class PersonalVaultService {
         body: jsonEncode({
           "userId": userId,
           "amount": amount,
-        }),
+        }), 
       );
 
       if (response.statusCode == 200) {
