@@ -7,6 +7,8 @@ const cors = require('cors');
 // Import Routes
 // const userRoutes = require('./src/routes/userRoutes');
 const geminiRoutes = require('./src/routes/geminiRoutes');
+const authRoutes = require('./src/routes/authRoutes');
+const streakRoutes = require('./src/routes/streakRoutes');
 const budgetFormRoutes = require('./src/routes/budgetFormRoutes');
 
 // Initialize Express App
@@ -21,6 +23,8 @@ app.use(cors()); // Enable Cross-Origin Resource Sharing
 // app.use('/api/users', userRoutes); // User authentication routes
 app.use('/api/gemini', geminiRoutes); // Financial goal routes
 app.use('/api/budgetForm', budgetFormRoutes);
+app.use('/api/auth', authRoutes); // Financial goal routes
+app.use('/api/streak', streakRoutes); // Financial goal routes
 
 // Database Connection
 mongoose
