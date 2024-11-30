@@ -15,7 +15,7 @@ class AuthService {
     );
 
     if (response.statusCode == 201) {
-      return {"success": true, "message": jsonDecode(response.body)["message"]};
+      return {"success": true, "message": jsonDecode(response.body)};
     } else {
       return {"success": false, "message": jsonDecode(response.body)["message"]};
     }
