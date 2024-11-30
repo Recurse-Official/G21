@@ -10,6 +10,7 @@ const geminiRoutes = require('./src/routes/geminiRoutes');
 const authRoutes = require('./src/routes/authRoutes');
 const streakRoutes = require('./src/routes/streakRoutes');
 const budgetFormRoutes = require('./src/routes/budgetFormRoutes');
+const goalRoutes = require('./src/routes/goalRoutes');
 
 // Initialize Express App
 const app = express();
@@ -25,6 +26,7 @@ app.use('/api/gemini', geminiRoutes); // Financial goal routes
 app.use('/api/budgetForm', budgetFormRoutes);
 app.use('/api/auth', authRoutes); // Financial goal routes
 app.use('/api/streak', streakRoutes); // Financial goal routes
+app.use('/api/goal', goalRoutes); // Financial goal routes
 
 // Database Connection
 mongoose
