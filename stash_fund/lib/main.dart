@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:stash_fund/components/auth_provider.dart';
 import 'package:stash_fund/screens/login.dart';
+import 'package:stash_fund/screens/qr_scanner.dart';
 import 'package:stash_fund/screens/signup.dart';
 import 'package:stash_fund/screens/categories.dart';
 import 'package:stash_fund/screens/form.dart';
@@ -183,6 +184,8 @@ class MyApp extends StatelessWidget {
             return _createRoute(SignupScreen());
           case '/login':
             return _createRoute(LoginScreen());
+          case '/qrscan':
+            return _createRoute(QRScanner());
           default:
             return null;
         }
@@ -247,6 +250,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
     return Scaffold(
       backgroundColor: Color(0xFFEDF4F2),
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         backgroundColor: Color(0xFFEDF4F2),
         elevation: 0,
         toolbarHeight: 100,

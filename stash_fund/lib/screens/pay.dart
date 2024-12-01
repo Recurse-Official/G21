@@ -70,10 +70,12 @@ class _PayScreenState extends State<PayScreen> {
                 onPressed: () {
                   String category = selectedCategory ?? 'No category selected';
                   String amount = amountController.text;
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text('Category: $category, Amount: $amount'),
-                    ),
+
+                  // Navigate to the QRScan screen
+                  Navigator.pushNamed(
+                    context,
+                    '/qrscan',
+                    arguments: {'category': category, 'amount': amount}, // Pass data if needed
                   );
                 },
                 child: Text('Pay'),
@@ -85,4 +87,3 @@ class _PayScreenState extends State<PayScreen> {
     );
   }
 }
-

@@ -1,3 +1,23 @@
+buildscript {
+    ext.kotlin_version = "1.9.24"
+    repositories {
+        google()
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath("com.android.tools.build:gradle:8.7.2")
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version")
+    }
+}
+configurations.all {
+    resolutionStrategy {
+        force "org.jetbrains.kotlin:kotlin-stdlib:1.9.24"
+        force "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.9.24"
+        force "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.9.24"
+    }
+}
+
 allprojects {
     repositories {
         google()
@@ -5,12 +25,12 @@ allprojects {
     }
 }
 
-rootProject.buildDir = "../build"
+rootProject.buildDir = '../build'
 subprojects {
     project.buildDir = "${rootProject.buildDir}/${project.name}"
 }
 subprojects {
-    project.evaluationDependsOn(":app")
+    project.evaluationDependsOn(':app')
 }
 
 tasks.register("clean", Delete) {

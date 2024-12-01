@@ -121,6 +121,7 @@ class _GroupListScreenState extends State<GroupListScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: const Text(
           'Group List',
           style: TextStyle(color: Colors.black),
