@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:stash_fund/screens/set_up_goal_page.dart';
 
 class CategoriesPage extends StatefulWidget {
   @override
@@ -34,7 +33,6 @@ class _CategoriesPageState extends State<CategoriesPage> {
         color: Color(0xFFE3F2FD),
         child: Column(
           children: [
-            SizedBox(height: 20),
             SizedBox(height: 20),
             Expanded(
               child: ListView(
@@ -90,9 +88,7 @@ class _CategoriesPageState extends State<CategoriesPage> {
             final category = items[index];
             return GestureDetector(
               onTap: () {
-                _navigateToSetUpGoal(context, category);
-                // print('Category: $category');
-                // print('Category Goals: $categoryGoals');
+                _showBottomSheet(context, category);
               },
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -117,17 +113,67 @@ class _CategoriesPageState extends State<CategoriesPage> {
     );
   }
 
-  void _navigateToSetUpGoal(BuildContext context, String category) async {
-    final result = await Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => SetUpGoalPage(category: category),
-      ),
-    );
-    if (result != null) {
-      setState(() {
-        categoryGoals[category] = result;
-      });
-    }
-  }
+ void _showBottomSheet(BuildContext context, String category) {
+  TextEditingController amountController = TextEditingController();
+
+  showModalBottomSheet(
+    context: context,
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+    ),
+    isScrollControlled: true, // Allows the bottom sheet to resize with the keyboard
+    builder: (BuildContext context) {
+      return Padding(
+        padding: EdgeInsets.only(
+          left: 16.0,
+          right: 16.0,
+          bottom: MediaQuery.of(context).viewInsets.bottom, // Dynamic padding to accommodate the keyboard
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            SizedBox(height: 16),
+            Text(
+              'Set Goal for $category',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+            SizedBox(height: 20),
+            TextField(
+              controller: amountController,
+              keyboardType: TextInputType.number,
+              decoration: InputDecoration(
+                labelText: 'Enter amount',
+                prefixText: '₹ ',
+                border: OutlineInputBorder(),
+              ),
+            ),
+            SizedBox(height: 20),
+            SizedBox(
+              width: double.infinity, // Makes the button full-width
+              height: 50, // Adjust the height as needed
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  padding: EdgeInsets.symmetric(vertical: 12),
+                ),
+                onPressed: () {
+                  if (amountController.text.isNotEmpty) {
+                    final amount = double.tryParse(amountController.text);
+                    if (amount != null) {
+                      setState(() {
+                        categoryGoals[category] = amount;
+                      });
+                      Navigator.pop(context);
+                    }
+                  }
+                },
+                child: Text('Save Goal', style: TextStyle(fontSize: 16)), // Adjust text size
+              ),
+            ),
+            SizedBox(height: 16), // Add some space at the bottom
+          ],
+        ),
+      );
+    },
+  );
+}
 }

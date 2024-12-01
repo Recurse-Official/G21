@@ -15,32 +15,29 @@ class _StreakWidgetState extends State<StreakWidget> {
   @override
   void initState() {
     super.initState();
-    _focusedDay = DateTime.now();
+    // Focus the calendar on November 9, 2024
+    _focusedDay = DateTime(2024, 12, 1);
     _selectedDay = _focusedDay;
-    _loadStreakDays();
+    _setFixedStreakDays(); // Initialize fixed streak days
   }
 
-  Future<void> _loadStreakDays() async {
+  Future<void> _setFixedStreakDays() async {
+    // Fixed dates for the streak
+    final fixedDates = [
+      DateTime(2024, 11, 29), // 9th November
+      DateTime(2024, 11, 30), // 10th November
+      DateTime(2024, 11, 28), // 11th November
+    ];
+
     final prefs = await SharedPreferences.getInstance();
-    final streakDaysString = prefs.getStringList('streakDays') ?? [];
-    final streakDays = streakDaysString.map((e) => DateTime.parse(e)).toList();
+    await prefs.setStringList(
+      'streakDays',
+      fixedDates.map((e) => e.toIso8601String()).toList(),
+    );
 
     setState(() {
-      _streakDays = streakDays;
+      _streakDays = fixedDates;
     });
-  }
-
-  Future<void> _addStreakDay(DateTime day) async {
-    final prefs = await SharedPreferences.getInstance();
-    if (!_streakDays.contains(day)) {
-      setState(() {
-        _streakDays.add(day);
-      });
-      await prefs.setStringList(
-        'streakDays',
-        _streakDays.map((e) => e.toIso8601String()).toList(),
-      );
-    }
   }
 
   bool _isStreakDay(DateTime day) {
@@ -63,7 +60,7 @@ class _StreakWidgetState extends State<StreakWidget> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text(
-                'Your Streak Calendar',
+                'Streak Calendar',
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
               SizedBox(height: 16), // Increased spacing
@@ -78,10 +75,9 @@ class _StreakWidgetState extends State<StreakWidget> {
                       _selectedDay.day == day.day,
                   onDaySelected: (selectedDay, focusedDay) {
                     setState(() {
-                      _selectedDay = selectedDay;
-                      _focusedDay = focusedDay;
+                      _selectedDay = selectedDay; // Update selected day
+                      _focusedDay = focusedDay;  // Update focused day
                     });
-                    _addStreakDay(selectedDay);
                   },
                   calendarBuilders: CalendarBuilders(
                     defaultBuilder: (context, day, focusedDay) {
