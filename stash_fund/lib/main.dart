@@ -22,7 +22,7 @@ class _MyAppState extends State<MyApp> {
             onPressed: () async{
               // Define the action for the button here
               var gem= GeminiService();
-              var oiut=await gem.generateContent("6749954e5c6f1e3fc91d100f",'Rent','alert');
+              var oiut=await gem.generateContent("6749954e5c6f1e3fc91d100f",'Movies','cumulative');
               print(oiut);
             },
             child: Text("Press Me"),
