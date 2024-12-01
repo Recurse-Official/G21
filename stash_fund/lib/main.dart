@@ -21,8 +21,8 @@ class _MyAppState extends State<MyApp> {
           child: ElevatedButton(
             onPressed: () async{
               // Define the action for the button here
-              var gem= GoalService();
-              var oiut=await gem.getGoals("63c7ac2d12e34567890abcdef");
+              var gem= GeminiService();
+              var oiut=await gem.generateContent("6749954e5c6f1e3fc91d100f",'Rent','alert');
               print(oiut);
             },
             child: Text("Press Me"),

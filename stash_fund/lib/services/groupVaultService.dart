@@ -64,7 +64,7 @@ class GroupVaultService {
 
   // Create a new group vault
   Future<Map<String, dynamic>> createGroupVault(String name, String purpose) async {
-    final url = Uri.parse("$baseUrl/create");
+    final url = Uri.parse("$baseUrl/createGroupVault");
 
     try {
       final response = await http.post(
@@ -89,7 +89,27 @@ class GroupVaultService {
 
   // Get group vault details
   Future<Map<String, dynamic>> getGroupVaultDetails(String groupId) async {
-    final url = Uri.parse("$baseUrl/details/$groupId");
+  final url = Uri.parse("$baseUrl/$groupId");
+
+  try {
+    final response = await http.get(
+      url,
+      headers: {"Content-Type": "application/json"},
+    );
+
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
+      // print(data);
+      return {"success": true, "groupVault": data["groupVault"]};
+    } else {
+      return {"success": false, "message": jsonDecode(response.body)["message"]};
+    }
+  } catch (error) {
+    return {"success": false, "message": "Error fetching group vault details: $error"};
+  }
+}
+  Future<Map<String, dynamic>> getUserVaults(String userId) async {
+    final url = Uri.parse("$baseUrl/userVaults/$userId");
 
     try {
       final response = await http.get(
@@ -99,12 +119,12 @@ class GroupVaultService {
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
-        return {"success": true, "groupVault": data["groupVault"]};
+        return {"success": true, "userVaults": data["userVaults"]};
       } else {
         return {"success": false, "message": jsonDecode(response.body)["message"]};
       }
     } catch (error) {
-      return {"success": false, "message": "Error fetching group vault details: $error"};
+      return {"success": false, "message": "Error fetching user vaults: $error"};
     }
   }
 }

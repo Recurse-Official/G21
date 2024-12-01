@@ -59,7 +59,7 @@ const handleBudgetFormSubmission = async (req, res) => {
 };
 const getBudgetFormData = async (req, res) => {
     const { userId } = req.params;
-  
+    console.log(userId+" in getBudgetFormData");
     try {
       // Fetch form submissions for the given userId
       const formData = await BudgetFormModel.find({ userId });

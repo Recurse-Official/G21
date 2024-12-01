@@ -7,7 +7,7 @@ class GoalService {
 
   // Add a new goal
   Future<Map<String, dynamic>> addGoal(String type, double targetAmount, String userId) async {
-    final url = Uri.parse("$baseUrl/add");
+    final url = Uri.parse("$baseUrl/addGoal");
 
     try {
       final response = await http.post(

@@ -26,8 +26,10 @@ const addGoal = async (req, res) => {
 
 // Get all goals for the user
 const getGoals = async (req, res) => {
+
   try {
     const { userId } = req.params;
+    console.log(userId);
     const goals = await Goal.find({ userId });
 
     if (!goals.length) {
