@@ -1,4 +1,6 @@
 
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:stash_fund/components/auth_provider.dart';
@@ -17,6 +19,7 @@ import 'package:stash_fund/components/savings_chart.dart';
 import 'package:stash_fund/components/navbar.dart';
 import 'package:stash_fund/components/AnimatedTextButton.dart';
 import 'package:stash_fund/components/streak_widget.dart';
+import 'package:stash_fund/services/geminiService.dart';
 import 'package:stash_fund/services/goalService.dart';
 
 void main() {
@@ -305,40 +308,129 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
     );
   }
 
-  void _showNotificationDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Notification'),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text('Question 1: How was your experience?'),
-              SizedBox(height: 10),
-              Text('Question 2: Any suggestions for improvement?'),
-              SizedBox(height: 10),
-              TextField(
-                decoration: InputDecoration(
-                  labelText: 'Your response',
-                  border: OutlineInputBorder(),
-                ),
-                maxLines: 2,
+ void _showNotificationDialog(BuildContext context) async {
+  var co = GeminiService();
+    // Fetch content for Rent and Movies
+  // final a = await co.generateContent("6749954e5c6f1e3fc91d100f", "Rent", "alert");
+  // final q = await co.generateContent("6749954e5c6f1e3fc91d100f", "Movies", "question");
+  // List of categories
+  final categories = ["Vacation", "Rent", "Dining Out", "Movies"];
+
+  // Create a Random object
+  final random = Random();
+
+  // Randomly pick an index within the list of categories
+  final randomIndex1 = random.nextInt(categories.length);
+  final randomIndi2 = random.nextInt(categories.length);
+
+  // Get the random category
+  final randi1 = categories[randomIndex1];
+  final randi2 = categories[randomIndi2];
+
+   // Generate content based on the random category
+  final a = await co.generateContent("6749954e5c6f1e3fc91d100f", randi1, "alert");
+  final q = await co.generateContent("6749954e5c6f1e3fc91d100f", randi2, "question");
+  // Extract relevant text content from the responses 
+  final Content1 = a['data']['candidates'][0]['content']['parts'][0]['text'] ?? 'No content available';
+  final Content2 = q['data']['candidates'][0]['content']['parts'][0]['text'] ?? 'No content available';
+
+  // Display the dialog
+   showDialog(
+  context: context,
+  builder: (BuildContext context) {
+    return AlertDialog(
+      backgroundColor: Color(0xFF31473A), // Set background color
+      title: Row(
+        children: [
+          Container(
+            width: 40, // Set the desired width
+            height: 40, // Set the desired height
+            child: ClipRect(
+              child: Image.asset(
+                'assets/images/logo.png',
+                fit: BoxFit.contain, // Adjust the fit property as needed
               ),
-            ],
+            ),
           ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: Text('Send'),
+          SizedBox(width: 10), // Add spacing between logo and text
+          Text(
+            'Hello User',
+            style: TextStyle(
+              color: Colors.white, // Set text color to white
+              fontFamily: 'Helvetica', // Set font to Helvetica
+            ),
+          ),
+        ],
+      ),
+      content: SingleChildScrollView( // Make content scrollable
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start, // Align content to the left
+          children: [
+            Text(
+              "$Content1",
+              style: TextStyle(
+                color: Colors.white, // Set text color to white
+                fontFamily: 'Helvetica', // Set font to Helvetica
+              ),
+            ),
+            SizedBox(height: 10),
+            Divider(
+              color: Colors.white, // Set divider color to white
+              thickness: 1, // Adjust thickness
+            ),
+            SizedBox(height: 10),
+            Text(
+              "$Content2",
+              style: TextStyle(
+                color: Colors.white, // Set text color to white
+                fontFamily: 'Helvetica', // Set font to Helvetica
+              ),
+            ),
+            SizedBox(height: 10),
+            TextField(
+              decoration: InputDecoration(
+                labelText: 'Your response',
+                labelStyle: TextStyle(
+                  color: Colors.white70, // Set label text color
+                  fontFamily: 'Helvetica', // Set font to Helvetica
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.white), // White border
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.white), // White border when focused
+                ),
+                border: OutlineInputBorder(),
+              ),
+              style: TextStyle(
+                color: Colors.white, // Text color inside TextField
+                fontFamily: 'Helvetica', // Set font to Helvetica
+              ),
+              maxLines: 2,
             ),
           ],
-        );
-      },
+        ),
+      ),
+      actions: [
+        TextButton(
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          child: Text(
+            'Send',
+            style: TextStyle(
+              color: Colors.white, // Set button text color
+              fontFamily: 'Helvetica', // Set font to Helvetica
+            ),
+          ),
+        ),
+      ],
     );
-  }
+  },
+);
+
+}
 
   Widget _buildScanToPayButton(BuildContext context) {
     return SizedBox(
